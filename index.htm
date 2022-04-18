@@ -31,7 +31,7 @@
         <div class="ball"></div>
     </div>
     <pre class="output"></pre>
-    <button id="request">Request</button>
+    <button id="request">Request 2</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -69,52 +69,29 @@
 
             window.addEventListener("deviceorientation", handleOrientation, true);
 
-            // if (location.protocol != "https:") {
-            //     location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-            // }
+            if (location.protocol != "https:") {
+                location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+            }
 
-            // function permission() {
-            //     if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
-            //         // (optional) Do something before API request prompt.
-            //         output.textContent = `beta : testing \n`;
-            //         output.textContent += `gamma: testing \n`;
-            //         output.textContent += `maxX : ${maxX} \n`;
-            //         output.textContent += `maxY: ${maxY} \n`;
-            //         DeviceMotionEvent.requestPermission()
-            //             .then(response => {
-            //                 // (optional) Do something after API prompt dismissed.
-            //                 if (response == "granted") {
-            //                     window.addEventListener("devicemotion", (event) => {
-            //                         var x = event.beta; // In degree in the range [-180,180)
-            //                         var y = event.gamma; // In degree in the range [-90,90)
-
-            //                         output.textContent = `beta : ${x}\n`;
-            //                         output.textContent += `gamma: ${y}\n`;
-
-            //                         // Because we don't want to have the device upside down
-            //                         // We constrain the x value to the range [-90,90]
-            //                         if (x > 90) { x = 90 };
-            //                         if (x < -90) { x = -90 };
-
-            //                         // To make computation easier we shift the range of
-            //                         // x and y to [0,180]
-            //                         x += 90;
-            //                         y += 90;
-
-            //                         // 10 is half the size of the ball
-            //                         // It center the positioning point to the center of the ball
-            //                         ball.style.top = (maxY * y / 180 - 10) + "px";
-            //                         ball.style.left = (maxX * x / 180 - 10) + "px";
-            //                     })
-            //                 }
-            //             })
-            //             .catch(console.error);
-            //     } else {
-            //         alert("DeviceMotionEvent is not defined");
-            //     }
-            // }
-            // const btn = document.getElementById("request");
-            // btn.addEventListener("click", permission);
+            function permission() {
+                if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
+                    // (optional) Do something before API request prompt.
+                    output.textContent = `Need to request for permission first \n`;
+                    DeviceMotionEvent.requestPermission()
+                        .then(response => {
+                            // (optional) Do something after API prompt dismissed.
+                            if (response == "granted") {
+                                window.addEventListener("deviceorientation", handleOrientation, true);
+                                $('#request').remove();
+                            }
+                        })
+                        .catch(console.error);
+                } else {
+                    alert("Click the Request button for perssion.");
+                }
+            }
+            const btn = document.getElementById("request");
+            btn.addEventListener("click", permission);
         });
 
     })(window.jQuery);
