@@ -75,11 +75,15 @@
             function permission() {
                 if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
                     // (optional) Do something before API request prompt.
+                    output.textContent = `beta : testing \n`;
+                    output.textContent += `gamma: testing \n`;
+                    output.textContent = `maxX : ${maxX} \n`;
+                    output.textContent += `maxY: ${maxY} \n`;
                     DeviceMotionEvent.requestPermission()
                         .then(response => {
                             // (optional) Do something after API prompt dismissed.
                             if (response == "granted") {
-                                window.addEventListener("devicemotion", (e) => {
+                                window.addEventListener("devicemotion", (event) => {
                                     var x = event.beta; // In degree in the range [-180,180)
                                     var y = event.gamma; // In degree in the range [-90,90)
 
