@@ -35,7 +35,7 @@
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
     <div class="output">Need to request for permission first</div>
-    <button id=request>Request2</button>
+    <button id=request>Request!</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -55,11 +55,11 @@
                 $('.output').text(x);
                 if (x < 15 && flag) {
                     flag = false;
-                    undo();
+                    throttle(undo(), 300);
                     //setTimeout(undo, 500);
                 } else if (x > 80 && flag) {
                     flag = false;
-                    redo();
+                    throttle(redo(), 300);
                     //setTimeout(redo, 500);
                 } else {
                     flag = true;
@@ -108,7 +108,7 @@
                 }
             }
 
-            window.addEventListener("deviceorientation", throttle(handleOrientation, 500), true);
+            //window.addEventListener("deviceorientation", throttle(handleOrientation, 500), true);
             $(document).on('input', '#input', function(e) {
                 var str = $(this).val().trim();
                 data.push(str.charAt(str.length - 1));
