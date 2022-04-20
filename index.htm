@@ -34,49 +34,33 @@
     </div>
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
-    <pre class="output">Need to request for permission first</pre>
-    <button id=request>Request</button>
+    <div class="output">Need to request for permission first</div>
+    <button id=request>Request!</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
         $(document).ready(function() {
+            var flag = true;
             if (location.protocol != "https:") {
                 location.href = "https:" + window.location.href.substring(window.location.protocol.length);
             }
             let data = [];
             let undoData = [];
             $('#input').val('');
-            window.addEventListener("deviceorientation", handleOrientation, true);
-            $(document).on('input', '#input', function(e) {
-                var str = $(this).val().trim();
-                data.push(str.charAt(str.length - 1));
-                $('.result').text(data);
-                $('.result-undo').text(undoData);
-            });
-            $(document).on('click', '#undo', undo);
-            $(document).on('click', '#redo', redo);
-            $(document).on('click', '#request', function() {
-                if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
-                    // (optional) Do something before API request prompt.
-                    $('.output').textContent = `Need to request for permission first \n`;
-                    DeviceMotionEvent.requestPermission()
-                        .then(response => {
-                            // (optional) Do something after API prompt dismissed.
-                            if (response == "granted") {
-                                window.addEventListener("deviceorientation", handleOrientation, true);
-                                $('#request').remove();
-                            }
-                        })
-                        .catch(console.error);
-                } else {
-                    alert("DeviceMotionEvent is undefined.");
-                }
-            });
-
+            
             function handleOrientation(event) {
                 $('.output').textContent = `Permission Granted. \n`;
                 var x = event.beta; // In degree in the range [-180,180)
-                var y = event.gamma; // In degree in the range [-90,90)
+                //var y = event.gamma; // In degree in the range [-90,90)
+                if(x > -20 && x < 180 && flag){
+                    undo();
+                    flag = false;
+                } else if (x > -180 && x < -90 && flag) {
+                    redo();
+                    flag = false;
+                } else {
+                    flag = true;
+                }
             }
 
             function undo() {
@@ -110,6 +94,32 @@
                     $('.result-undo').text('Nohing to redo');
                 }
             }
+
+            window.addEventListener("deviceorientation", handleOrientation, true);
+            $(document).on('input', '#input', function(e) {
+                var str = $(this).val().trim();
+                data.push(str.charAt(str.length - 1));
+                $('.result').text(data);
+                $('.result-undo').text(undoData);
+            });
+            $(document).on('click', '#undo', undo);
+            $(document).on('click', '#redo', redo);
+            $(document).on('click', '#request', function() {
+                if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
+                    // (optional) Do something before API request prompt.
+                    DeviceMotionEvent.requestPermission()
+                        .then(response => {
+                            // (optional) Do something after API prompt dismissed.
+                            if (response == "granted") {
+                                window.addEventListener("deviceorientation", handleOrientation, true);
+                                $('#request').remove();
+                            }
+                        })
+                        .catch(console.error);
+                } else {
+                    alert("DeviceMotionEvent is undefined.");
+                }
+            });
         });
 
     })(window.jQuery);
