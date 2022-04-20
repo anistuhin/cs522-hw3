@@ -35,7 +35,7 @@
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
     <div class="output">Need to request for permission first</div>
-    <button id=request>Request 2</button>
+    <button id=request>Request</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -47,13 +47,13 @@
             let data = [];
             let undoData = [];
             $('#input').val('');
-            
+
             function handleOrientation(event) {
                 $('.output').textContent = `Permission Granted. \n`;
                 var x = event.beta; // In degree in the range [-180,180)
                 //var y = event.gamma; // In degree in the range [-90,90)
                 $('.output').text(x);
-                if(x < 15 && flag){
+                if (x < 15 && flag) {
                     flag = false;
                     undo();
                     //setTimeout(undo, 500);
@@ -98,7 +98,17 @@
                 }
             }
 
-            window.addEventListener("deviceorientation", handleOrientation, true);
+            function throttle(fn, wait) {
+                var time = Date.now();
+                return function() {
+                    if ((time + wait - Date.now()) < 0) {
+                        fn();
+                        time = Date.now();
+                    }
+                }
+            }
+
+            window.addEventListener("deviceorientation", throttle(handleOrientation, 500), true);
             $(document).on('input', '#input', function(e) {
                 var str = $(this).val().trim();
                 data.push(str.charAt(str.length - 1));
@@ -114,7 +124,7 @@
                         .then(response => {
                             // (optional) Do something after API prompt dismissed.
                             if (response == "granted") {
-                                window.addEventListener("deviceorientation", handleOrientation, true);
+                                window.addEventListener("deviceorientation", throttle(handleOrientation, 500), true);
                                 $('#request').remove();
                             }
                         })
