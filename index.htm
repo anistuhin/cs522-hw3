@@ -35,7 +35,7 @@
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
     <div class="output">Need to request for permission first</div>
-    <button id=request>Request!</button>
+    <button id=request>Request</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -52,11 +52,12 @@
                 $('.output').textContent = `Permission Granted. \n`;
                 var x = event.beta; // In degree in the range [-180,180)
                 //var y = event.gamma; // In degree in the range [-90,90)
+                $('.output').text(x);
                 if(x > -20 && x < 180 && flag){
-                    undo();
+                    //undo();
                     flag = false;
                 } else if (x > -180 && x < -90 && flag) {
-                    redo();
+                    //redo();
                     flag = false;
                 } else {
                     flag = true;
