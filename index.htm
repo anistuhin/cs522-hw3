@@ -35,7 +35,7 @@
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
     <div class="output">Need to request for permission first</div>
-    <button id=request>Request 2</button>
+    <button id=request>Request</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -55,17 +55,19 @@
                 $('.output').text(x);
                 if (x < 15 && flag) {
                     flag = false;
-                    undo();
+                    setTimeout(undo, 300);
+                    //undo();
                 } else if (x > 80 && flag) {
                     flag = false;
-                    redo();
+                    setTimeout(undo, 300);
+                    //redo();
                 } else {
                     flag = true;
                 }
             }
 
             function undo() {
-                if (data.length > 0) {
+                if (data.length > 0 && flag) {
                     var pop = data.pop().trim();
                     undoData.push(pop);
                     $('.result').text(data);
@@ -81,7 +83,7 @@
             }
 
             function redo() {
-                if (undoData.length > 0) {
+                if (undoData.length > 0 && flag) {
                     var pop = undoData.pop().trim();
                     data.push(pop);
                     $('.result').text(data);
@@ -121,7 +123,7 @@
                         .then(response => {
                             // (optional) Do something after API prompt dismissed.
                             if (response == "granted") {
-                                $(window).on('deviceorientation', throttle(handleOrientation, 500));
+                                window.addEventListener("deviceorientation", throttle(handleOrientation, 500));
                                 $('#request').remove();
                             }
                         })
