@@ -35,7 +35,7 @@
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
     <div class="output">Need to request for permission first</div>
-    <button id=request>Request</button>
+    <button id=request>Request!</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -123,7 +123,7 @@
                         .then(response => {
                             // (optional) Do something after API prompt dismissed.
                             if (response == "granted") {
-                                window.addEventListener("deviceorientation", throttle(handleOrientation, 500));
+                                window.addEventListener("deviceorientation", handleOrientation);
                                 $('#request').remove();
                             }
                         })
