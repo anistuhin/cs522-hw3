@@ -260,7 +260,7 @@
                 $('.footer-two > .output > span.recorded').text(angle);
                 $('#record-angle').remove();
                 setTimeout(function() {
-                    $('footer-two').addClass('none');
+                    $('.footer-two').addClass('none');
                 }, 500);
             });
             $(document).on('click', '#request', function() {
@@ -271,7 +271,7 @@
                             // (optional) Do something after API prompt dismissed.
                             if (response == "granted") {
                                 window.addEventListener("deviceorientation", handleOrientation);
-                                $('footer-one').addClass('none');
+                                $('.footer-one').addClass('none');
                             }
                         })
                         .catch(console.error);
