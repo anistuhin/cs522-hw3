@@ -190,15 +190,15 @@
             //     location.href = "https:" + window.location.href.substring(window.location.protocol.length);
             // }
             function handleOrientation(event) {
-                x = event.gamma;
+                x = event.beta;
                 $('.footer-two > .output > span:not(.recorded)').text(Math.ceil(x));
                 if (Math.ceil(x) == (angle - 16) && flag) {
                     undo();
                     flag = false;
-                } else if (Math.ceil(x) == (angle + 26) && flag) {
+                } else if (Math.ceil(x) == (angle + 16) && flag) {
                     redo();
                     flag = false;
-                } else if (Math.ceil(x) < (angle + 26) || Math.ceil(x) > (angle - 16)) {
+                } else if (Math.ceil(x) < (angle + 16) || Math.ceil(x) > (angle - 16)) {
                     flag = true;
                 }
             }
