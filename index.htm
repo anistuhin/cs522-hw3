@@ -53,15 +53,15 @@
                 var x = event.beta; // In degree in the range [-180,180)
                 //var y = event.gamma; // In degree in the range [-90,90)
                 $('.output').text(x);
-                if (x < 15 && flag) {
+                if (x.ceil == 15 && flag) {// check current time and don't let in until sometime like 300 ms // check for exact value
                     //throttle(undo, 300);
                     flag = false;
                     undo();
-                } else if (x > 80 && flag) {
+                } else if (x.ceil == 80 && flag) {
                     //throttle(undo, 300);
                     flag = false;
                     redo();
-                } else {
+                } else if (x.ceil < 80 || x > 15) {
                     flag = true;
                 }
             }
