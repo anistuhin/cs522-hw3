@@ -35,7 +35,7 @@
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
     <div class="output">Need to request for permission first</div>
-    <button id=request>Request</button>
+    <button id=request>Request Access</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -53,14 +53,12 @@
                 var x = event.beta; // In degree in the range [-180,180)
                 //var y = event.gamma; // In degree in the range [-90,90)
                 $('.output').text(Math.ceil(x));
-                if (Math.ceil(x) == 15 && flag) {// check current time and don't let in until sometime like 300 ms // check for exact value
-                    //throttle(undo, 300);
-                    flag = false;
+                if (Math.ceil(x) == 15 && flag) {
                     undo();
-                } else if (Math.ceil(x) == 80 && flag) {
-                    //throttle(undo, 300);
                     flag = false;
+                } else if (Math.ceil(x) == 80 && flag) {
                     redo();
+                    flag = false;
                 } else if (Math.ceil(x) < 80 || Math.ceil(x) > 15) {
                     flag = true;
                 }
