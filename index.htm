@@ -131,6 +131,14 @@
     .none {
         display: none;
     }
+
+    footer {
+        position: fixed;
+        max-width: 320px;
+        bottom: 0;
+        left: calc((100% - 320px) / 2);
+        padding-bottom: 30px;
+    }
     </style>
 </head>
 
@@ -145,8 +153,10 @@
     </div>
     <button id="undo" class="none">Undo</button>
     <button id="redo" class="none">Redo</button>
-    <div class="output">Request for Device Motion permission first</div>
-    <button id=request>Request Access</button>
+    <footer>
+        <div class="output">Request for Device Motion permission first</div>
+        <button id=request>Request Access!</button>
+    </footer>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
     (function($) {
@@ -167,16 +177,17 @@
                 if (Math.ceil(x) == 15 && flag) {
                     undo();
                     flag = false;
-                } else if (Math.ceil(x) == 80 && flag) {
+                } else if (Math.ceil(x) == 45 && flag) {
                     redo();
                     flag = false;
-                } else if (Math.ceil(x) < 80 || Math.ceil(x) > 15) {
+                } else if (Math.ceil(x) < 45 || Math.ceil(x) > 15) {
                     flag = true;
                 }
             }
 
             function undo() {
                 if (data.length > 0) {
+                    flag = false;
                     var pop = data.pop().trim();
                     undoData.push(pop);
                     $('.result').text(data);
@@ -193,6 +204,7 @@
 
             function redo() {
                 if (undoData.length > 0) {
+                    flag = false;
                     var pop = undoData.pop().trim();
                     data.push(pop);
                     $('.result').text(data);
