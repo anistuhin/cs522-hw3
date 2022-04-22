@@ -186,7 +186,6 @@
             $('#input').val('');
 
             function handleOrientation(event) {
-                $('.output').text('<span style="color: green">Device Motion Permission Granted.</span>');
                 if (window.matchMedia("(orientation: portrait)").matches) {
                     // you're in PORTRAIT mode
                     var x = event.beta; // In degree in the range [-180,180)                
@@ -197,13 +196,13 @@
                 }
                 $('.footer-two > .output > span:not(.recorded)').text(Math.ceil(x));
                 angle = Math.ceil(x);
-                if (Math.ceil(x) == 12 && flag) {
+                if (Math.ceil(x) == (angle - 16) && flag) {
                     undo();
                     flag = false;
-                } else if (Math.ceil(x) == 45 && flag) {
+                } else if (Math.ceil(x) == (angle + 16) && flag) {
                     redo();
                     flag = false;
-                } else if (Math.ceil(x) < 45 || Math.ceil(x) > 12) {
+                } else if (Math.ceil(x) < (angle + 16) || Math.ceil(x) > (angle - 16)) {
                     flag = true;
                 }
             }
@@ -252,7 +251,7 @@
             });
             $(document).on('click', '#undo', undo);
             $(document).on('click', '#redo', redo);
-            $(document).on('click', '#record-angle', function (){
+            $(document).on('click', '#record-angle', function() {
                 $('.footer-two > .output > span:not(.recorded)').text(angle);
                 $('.footer-two > .output > span:not(.recorded)').addClass('recorded');
                 $('#record-angle').remove();
