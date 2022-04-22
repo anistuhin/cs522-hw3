@@ -56,6 +56,7 @@
         word-wrap: break-word;
         text-rendering: optimizeLegibility;
         text-align: center;
+        padding-top: calc((100vh - 350px) / 2);
     }
 
     h2 {
@@ -134,10 +135,13 @@
 
     footer {
         position: fixed;
-        max-width: 320px;
+        width: 100%;
         bottom: 0;
-        left: calc((100% - 320px) / 2);
-        padding-bottom: 30px;
+        left: 0;
+        padding-top: calc((100vh - 320px) / 2);
+        background: rgba(255, 255, 255, 1);
+        z-index: 9;
+        height: 100vh;
     }
     </style>
 </head>
@@ -154,8 +158,8 @@
     <button id="undo" class="none">Undo</button>
     <button id="redo" class="none">Redo</button>
     <footer>
-        <div class="output">Request for Device Motion permission first</div>
-        <button id=request>Request Access!</button>
+        <h2 class="output" style="margin-bottom: 0;">Please, request for Device Motion permission to start</h2>
+        <button id=request>Request Access</button>
     </footer>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
@@ -174,13 +178,13 @@
                 var x = event.beta; // In degree in the range [-180,180)
                 //var y = event.gamma; // In degree in the range [-90,90)
                 $('.output').text(Math.ceil(x));
-                if (Math.ceil(x) == 15 && flag) {
+                if (Math.ceil(x) == 12 && flag) {
                     undo();
                     flag = false;
                 } else if (Math.ceil(x) == 45 && flag) {
                     redo();
                     flag = false;
-                } else if (Math.ceil(x) < 45 || Math.ceil(x) > 15) {
+                } else if (Math.ceil(x) < 45 || Math.ceil(x) > 12) {
                     flag = true;
                 }
             }
@@ -235,7 +239,7 @@
                             // (optional) Do something after API prompt dismissed.
                             if (response == "granted") {
                                 window.addEventListener("deviceorientation", handleOrientation);
-                                $('#request').remove();
+                                $('footer').addClass('none');
                             }
                         })
                         .catch(console.error);
