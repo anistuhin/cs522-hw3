@@ -9,8 +9,10 @@
     #input {
         width: 200px;
         height: 40px;
-        margin-bottom: 20px;
+        display: block;
+        margin: 20px auto;
         padding: 5px;
+        border-radius: 3px;
     }
 
     .result,
@@ -18,7 +20,7 @@
         padding: 15px;
     }
 
-    .result-undo {
+    .result-undo, .status {
         color: red;
     }
     </style>
@@ -26,15 +28,15 @@
 
 <body>
     <input type="text" id="input">
-    <pre class="result">
+    <!-- <pre class="result">
     </pre>
     <pre class="result-undo">
-    </pre>
+    </pre> -->
     <div class="status">
     </div>
     <button id="undo">Undo</button>
     <button id="redo">Redo</button>
-    <div class="output">Need to request for permission first</div>
+    <div class="output">Request for Device Motion permission first</div>
     <button id=request>Request Access</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
@@ -49,7 +51,7 @@
             $('#input').val('');
 
             function handleOrientation(event) {
-                $('.output').textContent = `Permission Granted. \n`;
+                $('.output').text('<span style="color: green">Device Motion Permission Granted.</span>');
                 var x = event.beta; // In degree in the range [-180,180)
                 //var y = event.gamma; // In degree in the range [-90,90)
                 $('.output').text(Math.ceil(x));
@@ -76,7 +78,7 @@
                     });
                     $('#input').val(result);
                 } else {
-                    $('.result').text('Nohing to undo');
+                    $('.status').text('Nohing to undo');
                 }
             }
 
@@ -92,7 +94,7 @@
                     });
                     $('#input').val(result);
                 } else {
-                    $('.result-undo').text('Nohing to redo');
+                    $('.status').text('Nohing to redo');
                 }
             }
 
