@@ -140,8 +140,15 @@
         left: 0;
         padding-top: calc((100vh - 320px) / 2);
         background: rgba(255, 255, 255, 1);
-        z-index: 9;
         height: 100vh;
+    }
+
+    .footer-one {
+        z-index: 9;
+    }
+
+    .footer-two {
+        z-index: 8;
     }
     </style>
 </head>
@@ -157,9 +164,13 @@
     </div>
     <button id="undo" class="none">Undo</button>
     <button id="redo" class="none">Redo</button>
-    <footer>
+    <footer class="footer-one">
         <h2 class="output" style="margin-bottom: 0;">Please, request for Device Motion permission to start</h2>
-        <button id=request>Request Access</button>
+        <button id="request">Request Access</button>
+    </footer>
+    <footer class="footer-two">
+        <h2 class="output" style="margin-bottom: 0;">Your default phone holding angle range is around: <span>0<span></h2>
+        <button id="record-angle">Record Angle</button>
     </footer>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
@@ -171,13 +182,20 @@
             // }
             let data = [];
             let undoData = [];
+            let angle = 0;
             $('#input').val('');
 
             function handleOrientation(event) {
                 $('.output').text('<span style="color: green">Device Motion Permission Granted.</span>');
-                var x = event.beta; // In degree in the range [-180,180)
-                //var y = event.gamma; // In degree in the range [-90,90)
-                $('.output').text(Math.ceil(x));
+                if (window.matchMedia("(orientation: portrait)").matches) {
+                    // you're in PORTRAIT mode
+                    var x = event.beta; // In degree in the range [-180,180)                
+                }
+                if (window.matchMedia("(orientation: landscape)").matches) {
+                    // you're in LANDSCAPE mode
+                    var x = event.gamma; // In degree in the range [-90,90)
+                }
+                $('.footer-two > .output > span:not(.recorded)').text((Math.ceil(x) - 15) + ' to ' + (Math.ceil(x) - 15) + 'degrees from the plane.');
                 if (Math.ceil(x) == 12 && flag) {
                     undo();
                     flag = false;
@@ -201,6 +219,7 @@
                         result += value;
                     });
                     $('#input').val(result);
+                    $('.status').text('');
                 } else {
                     $('.status').text('Nohing to undo');
                 }
@@ -218,6 +237,7 @@
                         result += value;
                     });
                     $('#input').val(result);
+                    $('.status').text('');
                 } else {
                     $('.status').text('Nohing to redo');
                 }
@@ -231,6 +251,14 @@
             });
             $(document).on('click', '#undo', undo);
             $(document).on('click', '#redo', redo);
+            $(document).on('click', '#record-angle', function (){
+                $('.footer-two > .output > span:not(.recorded)').text((Math.ceil(x) - 15) + ' to ' + (Math.ceil(x) - 15) + 'degrees from the plane.');
+                $('.footer-two > .output > span:not(.recorded)').addClass('recorded');
+                $('#record-angle').remove();
+                setTimeout(function() {
+                    $('#record-angle').parent('footer').addClass('none');
+                }, 500);
+            });
             $(document).on('click', '#request', function() {
                 if (typeof(DeviceMotionEvent) !== "undefined" && typeof(DeviceMotionEvent.requestPermission) === "function") {
                     // (optional) Do something before API request prompt.
@@ -239,7 +267,7 @@
                             // (optional) Do something after API prompt dismissed.
                             if (response == "granted") {
                                 window.addEventListener("deviceorientation", handleOrientation);
-                                $('footer').addClass('none');
+                                $('#request').parent('footer').addClass('none')
                             }
                         })
                         .catch(console.error);
