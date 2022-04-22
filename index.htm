@@ -6,13 +6,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HW3</title>
     <style type="text/css">
-    #input {
-        width: 200px;
-        height: 40px;
+    @font-face {
+        font-family: 'Europa-Regular';
+        src: url('assets/fonts/Europa-Regular.eot');
+        src: url('assets/fonts/Europa-Regular.eot?#iefix') format('embedded-opentype'),
+            url('assets/fonts/Europa-Regular.woff2') format('woff2'),
+            url('assets/fonts/Europa-Regular.woff') format('woff'),
+            url('assets/fonts/Europa-Regular.ttf') format('truetype'),
+            url('assets/fonts/Europa-Regular.svg#Europa-Regular') format('svg');
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+    }
+
+    @font-face {
+        font-family: 'Avenir-Black';
+        src: url('assets/fonts/Avenir-Black.eot');
+        src: url('assets/fonts/Avenir-Black.eot?#iefix') format('embedded-opentype'),
+            url('assets/fonts/Avenir-Black.woff2') format('woff2'),
+            url('assets/fonts/Avenir-Black.woff') format('woff'),
+            url('assets/fonts/Avenir-Black.ttf') format('truetype'),
+            url('assets/fonts/Avenir-Black.svg#Avenir-Black') format('svg');
+        font-weight: 900;
+        font-style: normal;
+        font-stretch: normal;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    html {
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        color: #565656;
+        font-family: "Europa-Regular";
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        letter-spacing: normal;
+        word-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        text-align: center;
+    }
+
+    h2 {
+        color: #15172c;
+        font-family: "Avenir-Black";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        width: calc(100% - 20px);
+        max-width: 320px;
         display: block;
         margin: 20px auto;
-        padding: 5px;
-        border-radius: 3px;
+    }
+
+    #input {
+        color: #565656;
+        font-size: 17px;
+        line-height: 25px;
+        height: 50px;
+        border: solid 1px #dbdbdb;
+        background-color: #ffffff;
+        padding: 12px 17px 13px;
+        border-radius: 3px !important;
+        width: calc(100% - 20px);
+        max-width: 320px;
+        display: block;
+        margin: 20px auto;
+    }
+
+    #input:focus {
+        border-color: #15172c;
+    }
+
+    #input::-webkit-input-placeholder {
+        opacity: .7;
+    }
+
+    #input::-moz-placeholder {
+        opacity: .7;
+    }
+
+    #input::-ms-input-placeholder {
+        opacity: .7;
+    }
+
+    #input::placeholder {
+        opacity: .7;
     }
 
     .result,
@@ -20,22 +109,42 @@
         padding: 15px;
     }
 
-    .result-undo, .status {
+    .result-undo,
+    .status {
         color: red;
+    }
+
+    button {
+        color: #ffffff;
+        height: 50px;
+        font-size: 18px;
+        line-height: 50px;
+        letter-spacing: -0.09px;
+        text-align: center;
+        background-color: #15172c;
+        border-radius: 3px;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-top: 25px;
+    }
+
+    .none {
+        display: none;
     }
     </style>
 </head>
 
 <body>
+    <h2>Simple undo/redo based on device motion</h2>
     <input type="text" id="input">
-    <!-- <pre class="result">
+    <pre class="result none">
     </pre>
-    <pre class="result-undo">
-    </pre> -->
+    <pre class="result-undo none">
+    </pre>
     <div class="status">
     </div>
-    <button id="undo">Undo</button>
-    <button id="redo">Redo</button>
+    <button id="undo" class="none">Undo</button>
+    <button id="redo" class="none">Redo</button>
     <div class="output">Request for Device Motion permission first</div>
     <button id=request>Request Access</button>
     <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
@@ -43,9 +152,9 @@
     (function($) {
         $(document).ready(function() {
             var flag = true;
-            if (location.protocol != "https:") {
-                location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-            }
+            // if (location.protocol != "https:") {
+            //     location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+            // }
             let data = [];
             let undoData = [];
             $('#input').val('');
@@ -95,16 +204,6 @@
                     $('#input').val(result);
                 } else {
                     $('.status').text('Nohing to redo');
-                }
-            }
-
-            function throttle(fn, wait) {
-                var time = Date.now();
-                return function() {
-                    if ((time + wait - Date.now()) < 0) {
-                        fn();
-                        time = Date.now();
-                    }
                 }
             }
 
